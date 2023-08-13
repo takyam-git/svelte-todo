@@ -1,7 +1,8 @@
 <script lang="ts">
+	import dayjs from 'dayjs';
 	import type { FormEventHandler } from 'svelte/elements';
 	import type { TODO } from '../stores/todo';
-	import { todos, addNewTodo } from '../stores/todo';
+	import { todos, addNewTodo, removeTodo } from '../stores/todo';
 	import { onMount } from 'svelte';
 
 	let input: HTMLInputElement | null = null;
@@ -17,8 +18,8 @@
 		newTodo = '';
 	};
 
-	let reversed: TODO[];
-	$: reversed = [...$todos].reverse();
+	let reversed: (TODO & { index: number })[];
+	$: reversed = [...$todos].map((todo, index) => ({ ...todo, index })).reverse();
 
 	onMount(() => {
 		if (input) {
@@ -41,7 +42,8 @@
 		{#each reversed as todo}
 			<li class="todo">
 				<p class="title">{todo.title}</p>
-				<p class="created-at">{todo.createdAt.toLocaleString()}</p>
+				<p class="created-at">{dayjs(todo.createdAt).format('YYYY/MM/DD HH:mm:ss')}</p>
+				<button class="remove" on:click={() => removeTodo(todo.index)}>X</button>
 			</li>
 		{/each}
 	</ul>
@@ -54,12 +56,24 @@
 		.todo {
 			list-style: none;
 			display: flex;
+			align-items: center;
+			gap: 10px;
 
-			.title {
-				flex: 1;
+			p {
+				margin: 0.2rem;
+
+				&.title {
+					flex: 1;
+				}
+
+				&.created-at {
+					flex: 0 0 auto;
+				}
 			}
-			.created-at {
+
+			.remove {
 				flex: 0 0 auto;
+				display: inline;
 			}
 		}
 	}
