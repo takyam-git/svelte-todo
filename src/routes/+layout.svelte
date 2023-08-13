@@ -1,6 +1,10 @@
 <script>
+	import { PUBLIC_API_BASE_URL } from '$env/static/public';
+	import axios from 'axios';
 	export const prerender = false;
 	export const ssr = false;
+
+	axios.defaults.baseURL = `${PUBLIC_API_BASE_URL.replace(/\/$/, '')}`;
 </script>
 
 <div class="app">

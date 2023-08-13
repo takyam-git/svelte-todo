@@ -2,7 +2,7 @@
 	import dayjs from 'dayjs';
 	import type { FormEventHandler } from 'svelte/elements';
 	import type { TODO } from '../stores/todo';
-	import { todos, addNewTodo, removeTodo } from '../stores/todo';
+	import { todos, addNewTodo, removeTodo, fetchAll } from '../stores/todo';
 	import { onMount } from 'svelte';
 
 	let input: HTMLInputElement | null = null;
@@ -21,10 +21,11 @@
 	let reversed: (TODO & { index: number })[];
 	$: reversed = [...$todos].map((todo, index) => ({ ...todo, index })).reverse();
 
-	onMount(() => {
+	onMount(async () => {
 		if (input) {
 			input.focus();
 		}
+		await fetchAll();
 	});
 </script>
 
