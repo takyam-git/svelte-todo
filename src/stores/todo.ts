@@ -12,7 +12,6 @@ export const addNewTodo = (title: string) =>
 
 export const removeTodo = (index: number) =>
 	todos.update((list) => {
-		console.log(list, index);
 		const newList = [...list];
 		newList.splice(index, 1);
 		return newList;
